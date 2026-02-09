@@ -1,0 +1,9 @@
+[build]
+  base = "webapp"
+  publish = "webapp"
+
+# Handle SPA routing - redirect all requests to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
