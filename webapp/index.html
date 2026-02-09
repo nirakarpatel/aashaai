@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Aasha.AI - Offline AI-powered multi-disease health screening">
+    <meta name="theme-color" content="#2E7D32">
+    <title>Aasha.AI - Health Screening</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Splash -->
+    <div id="splash-screen" class="screen active">
+        <div class="splash-content">
+            <div class="logo-container">
+                <div class="logo-circle"><i class="fas fa-heartbeat"></i></div>
+                <div class="logo-pulse"></div>
+            </div>
+            <h1 class="logo-text">Aasha<span>.AI</span></h1>
+            <p class="tagline">Offline Health Screening</p>
+            <div class="loader"><div class="loader-bar"></div></div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-screen" class="screen">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="welcome-section">
+                    <span class="welcome-text">Welcome back,</span>
+                    <h2 id="worker-name">ASHA Worker</h2>
+                </div>
+                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+            </div>
+            <div class="stats-row">
+                <div class="stat-card"><i class="fas fa-calendar-day"></i><div><span class="stat-value" id="today-count">0</span><span class="stat-label">Today</span></div></div>
+                <div class="stat-card"><i class="fas fa-users"></i><div><span class="stat-value" id="total-patients">0</span><span class="stat-label">Total</span></div></div>
+            </div>
+        </header>
+        <main class="dashboard-main">
+            <div class="quick-actions">
+                <button class="quick-btn primary" id="new-screening-btn"><i class="fas fa-plus-circle"></i><span>New Screening</span></button>
+                <button class="quick-btn secondary" id="history-btn"><i class="fas fa-history"></i><span>History</span></button>
+            </div>
+            <h3 class="section-title">Health Modules</h3>
+            <div class="modules-grid" id="modules-grid"></div>
+        </main>
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="home"><i class="fas fa-home"></i><span>Home</span></button>
+            <button class="nav-item" data-tab="patients"><i class="fas fa-users"></i><span>Patients</span></button>
+            <button class="nav-item" data-tab="settings"><i class="fas fa-cog"></i><span>Settings</span></button>
+        </nav>
+    </div>
+
+    <!-- Patient Registration -->
+    <div id="registration-screen" class="screen">
+        <header class="screen-header"><button class="back-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i></button><h2>New Patient</h2><div class="spacer"></div></header>
+        <main class="form-container">
+            <form id="patient-form">
+                <div class="form-card">
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="patient-name" required></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Age *</label><input type="number" id="patient-age" min="0" max="120" required></div>
+                        <div class="form-group"><label>Gender *</label><select id="patient-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                    </div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="patient-phone"></div>
+                    <div class="form-group"><label>Village</label><input type="text" id="patient-village"></div>
+                </div>
+                <div class="form-card"><h4>Symptoms</h4><div id="symptoms-list"></div></div>
+                <button type="submit" class="btn-primary btn-large"><i class="fas fa-play"></i> Start Screening</button>
+            </form>
+        </main>
+    </div>
+
+    <!-- Module Select -->
+    <div id="module-select-screen" class="screen">
+        <header class="screen-header"><button class="back-btn" data-back="registration"><i class="fas fa-arrow-left"></i></button><h2>Select Test</h2><div class="spacer"></div></header>
+        <main class="module-select-container"><div id="selected-patient-info"></div><div class="module-list" id="module-list"></div></main>
+    </div>
+
+    <!-- TB Recording -->
+    <div id="tb-screen" class="screen">
+        <header class="screen-header tb-header"><button class="back-btn" data-back="module-select"><i class="fas fa-arrow-left"></i></button><h2>TB Cough Screening</h2><div class="spacer"></div></header>
+        <main class="recording-container">
+            <div class="patient-chip" id="tb-patient-chip"></div>
+            <div class="recording-visual">
+                <div class="waveform-container" id="waveform"></div>
+                <div class="record-btn-container"><div class="record-pulse" id="record-pulse"></div><button class="record-btn" id="record-btn"><i class="fas fa-microphone"></i></button></div>
+                <div class="timer" id="timer">00:00</div>
+                <p id="recording-status">Tap to start recording</p>
+            </div>
+            <div class="instructions"><h4>Instructions</h4><ul><li>Ask patient to cough 3-4 times</li><li>Hold phone 15-20cm from mouth</li><li>Record for at least 5 seconds</li></ul></div>
+            <button class="btn-primary btn-large" id="analyze-cough-btn" disabled><i class="fas fa-brain"></i> Analyze Cough</button>
+        </main>
+    </div>
+
+    <!-- Skin/Anemia Camera Screens -->
+    <div id="skin-screen" class="screen">
+        <header class="screen-header skin-header"><button class="back-btn" data-back="module-select"><i class="fas fa-arrow-left"></i></button><h2>Skin Scan</h2><div class="spacer"></div></header>
+        <main class="camera-container"><div class="patient-chip" id="skin-patient-chip"></div><div class="camera-preview"><video id="skin-video" autoplay playsinline></video><canvas id="skin-canvas"></canvas><img id="skin-captured"><div class="camera-overlay"><div class="scan-frame"></div><p>Position affected area</p></div></div><div class="camera-controls"><button class="capture-btn" id="skin-capture-btn"><i class="fas fa-camera"></i></button></div><button class="btn-primary btn-large" id="analyze-skin-btn" disabled><i class="fas fa-brain"></i> Analyze Skin</button></main>
+    </div>
+    <div id="anemia-screen" class="screen">
+        <header class="screen-header anemia-header"><button class="back-btn" data-back="module-select"><i class="fas fa-arrow-left"></i></button><h2>Anemia Check</h2><div class="spacer"></div></header>
+        <main class="camera-container"><div class="patient-chip" id="anemia-patient-chip"></div><div class="scan-type-toggle"><button class="toggle-btn active" data-type="palm"><i class="fas fa-hand-paper"></i> Palm</button><button class="toggle-btn" data-type="eye"><i class="fas fa-eye"></i> Eye</button></div><div class="camera-preview"><video id="anemia-video" autoplay playsinline></video><canvas id="anemia-canvas"></canvas><img id="anemia-captured"><div class="camera-overlay"><div class="scan-frame circle"></div><p id="anemia-instruction">Show inner palm</p></div></div><div class="camera-controls"><button class="capture-btn" id="anemia-capture-btn"><i class="fas fa-camera"></i></button></div><button class="btn-primary btn-large" id="analyze-anemia-btn" disabled><i class="fas fa-brain"></i> Analyze</button></main>
+    </div>
+
+    <!-- Maternal/Triage Questionnaires -->
+    <div id="maternal-screen" class="screen">
+        <header class="screen-header maternal-header"><button class="back-btn" data-back="module-select"><i class="fas fa-arrow-left"></i></button><h2>Maternal Health</h2><div class="spacer"></div></header>
+        <div class="maternal-banner"><i class="fas fa-baby"></i><div><h3>Pregnancy Danger Signs</h3><p>Check all symptoms</p></div></div>
+        <main class="questionnaire-container"><div id="maternal-questions"></div><div id="maternal-count">0 selected</div><button class="btn-primary btn-large" id="analyze-maternal-btn"><i class="fas fa-brain"></i> Assess Risk</button></main>
+    </div>
+    <div id="triage-screen" class="screen">
+        <header class="screen-header triage-header"><button class="back-btn" data-back="module-select"><i class="fas fa-arrow-left"></i></button><h2>Symptom Checker</h2><div class="spacer"></div></header>
+        <div class="triage-banner"><i class="fas fa-comment-medical"></i><div><h3>Select Symptoms</h3><p id="triage-count">0 selected</p></div></div>
+        <main class="triage-container" id="triage-symptoms"></main>
+        <div class="triage-footer"><button class="btn-primary btn-large" id="analyze-triage-btn"><i class="fas fa-brain"></i> Check Urgency</button></div>
+    </div>
+
+    <!-- Processing -->
+    <div id="processing-screen" class="screen">
+        <main class="processing-container"><div class="ai-brain"><div class="brain-circle"><i class="fas fa-brain"></i></div><div class="brain-pulse"></div></div><h2>AI Analysis</h2><p class="processing-text">Analyzing...</p><div id="processing-steps"></div><div class="offline-badge"><i class="fas fa-wifi-slash"></i><span>Works Offline</span></div></main>
+    </div>
+
+    <!-- Result -->
+    <div id="result-screen" class="screen">
+        <header class="screen-header"><button class="back-btn" data-back="dashboard"><i class="fas fa-times"></i></button><h2>Result</h2><div class="spacer"></div></header>
+        <main class="result-container"><div id="result-patient-info"></div><div class="risk-display" id="risk-display"><div class="risk-icon-large"><i class="fas fa-check-circle"></i></div><h2 class="risk-level">LOW RISK</h2><p class="confidence">85% Confidence</p></div><div class="recommendation-card"><div class="card-header"><i class="fas fa-stethoscope"></i><span>Recommendation</span></div><p id="recommendation-text"></p></div><div class="phc-card" id="phc-card"><div class="card-header"><i class="fas fa-hospital"></i><span>Nearest PHC</span></div><div id="phc-info"></div><button class="btn-secondary" id="open-maps-btn"><i class="fas fa-map-marker-alt"></i> Open Maps</button></div><div class="result-actions"><button class="btn-primary" id="refer-btn"><i class="fas fa-share"></i> Mark Referred</button><button class="btn-secondary" id="back-home-btn"><i class="fas fa-home"></i> Home</button></div></main>
+    </div>
+
+    <!-- History -->
+    <div id="history-screen" class="screen">
+        <header class="screen-header"><button class="back-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i></button><h2>Patient History</h2><button class="search-btn" id="search-toggle"><i class="fas fa-search"></i></button></header>
+        <div class="search-bar" id="search-bar"><i class="fas fa-search"></i><input type="text" id="search-input" placeholder="Search..."></div>
+        <div class="filter-chips"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="high">High</button><button class="chip" data-filter="medium">Medium</button><button class="chip" data-filter="low">Low</button></div>
+        <main class="history-list" id="history-list"></main>
+        <button class="fab" id="fab-new"><i class="fas fa-plus"></i></button>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/modules.js"></script>
+</body>
+</html>
